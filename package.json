@@ -1,0 +1,16 @@
+{
+  "name": "node_gql_mongo_template",
+  "version": "0.1.0",
+  "description": "Apollo express server to datahandling with GraphQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Node",
+    "GraphQL",
+    "MongoDB"
+  ],
+  "author": "Hufnagels",
+  "license": "MIT"
+}
