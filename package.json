@@ -4,7 +4,8 @@
   "description": "Apollo express server to datahandling with GraphQL",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "keywords": [
     "Node",
@@ -12,5 +13,16 @@
     "MongoDB"
   ],
   "author": "Hufnagels",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^3.6.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "graphql": "^16.3.0",
+    "lodash": "^4.17.21",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.9",
+    "nodemon": "^2.0.15"
+  }
 }
