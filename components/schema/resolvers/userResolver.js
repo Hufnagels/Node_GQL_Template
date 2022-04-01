@@ -37,4 +37,33 @@ module.exports = {
       return await Users.find({_id: _id })
     },
   },
+
+  Mutation: {
+    createUser: async (parent, args, context, info) => {
+      const {first_name, family_name, date_of_birth} = args.user;
+      const user = new Users({
+        first_name,
+        family_name,
+        date_of_birth,
+      })
+      await user.save()
+      return user
+    },
+    deletePost: async (parent, args, context, info) => {
+      const { _id } = args
+      await Users.findByIdAndDelete({_id})
+      return "OK"
+    },
+    updatePost: async (parent, args, context, info) => {
+      const { _id } = args
+      const {first_name, family_name, date_of_birth} = args.user;
+
+      const user = await Users.findByIdAndUpdate(
+        _id, 
+        {first_name, family_name, date_of_birth}, 
+        {new: true}
+      )
+      return user
+    }
+  }
 };

@@ -29,8 +29,8 @@ type User {
     # email: String!
   }
 
-  # type Mutation {
-  #   createPost(post: PostInput): Post
-  #   deletePost(_id: ID!): String
-  #   updatePost(_id: ID, post: PostInput): Post
-  # }
+  type Mutation {
+    createUser(user: UserInput): User
+    deleteUser(_id: ID!): String
+    updateUser(_id: ID, user: UserInput): User
+  }
