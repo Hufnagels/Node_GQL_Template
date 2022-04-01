@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const userSchema = new mongoose.Schema(
   {
-    _id: Schema.Types.ObjectId,
+    //_id: Schema.Types.ObjectId,
     username: { type: String, required: true, maxLength: 100, unique: true, trim: true},
     first_name: {type: String, required: true, maxLength: 100, trim: true},
     family_name: {type: String, required: true, maxLength: 100, trim: true},
@@ -28,4 +28,5 @@ userSchema.methods.validPassword = function (password) {
 }
 
 //export default UserSchema
-module.exports = mongoose.model("users", userSchema);
+const Users = mongoose.model("users", userSchema);
+module.exports = Users

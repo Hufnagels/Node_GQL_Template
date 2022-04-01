@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const mapSchema = new Schema(
   {
-    _id: Schema.Types.ObjectId,
+    //_id: Schema.Types.ObjectId,
     owner: { type: String, required: true},
     title: { type: String, required: true},
     description: { type: String, required: true},
@@ -19,5 +19,5 @@ const mapSchema = new Schema(
     timestamps: true
   }
 );
-
-module.exports = mongoose.model("maps", mapSchema);
+const Maps = mongoose.model("maps", mapSchema);
+module.exports = Maps

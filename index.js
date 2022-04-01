@@ -2,30 +2,38 @@ const express = require("express");
 const cors = require("cors");
 require('dotenv').config();
 
-const { ApolloServer } = require( 'apollo-server-express');
-const resolvers = require( './schema/resolvers');
-const typeDefs = require( './schema/typedefs');
+const { ApolloServer, gql } = require( 'apollo-server-express');
+const resolvers = require( './components/schema/_resolvers');
+const typeDefs = require( './components/schema/typeDefs');
 
+const homeRoutes = require('./components/routes/home')
 const port = process.env.PORT || 4000;
-const db = require('./config/database/mongoconnect')
+const db = require('./components/database/mongoconnect')
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  playground: true,
-});
+const serverStart = async () => {
+  const app = express();
+  app.use(express.json());
+  app.use(cors());
 
-const app = express();
-app.use(cors());
-server.applyMiddleware({ app });
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    //playground: true,
+  });
 
-// app.get('/', (req, res) => {
-//   console.log("Apollo GraphQL Express server is ready");
-// });
+  await apolloServer.start();
+
+  apolloServer.applyMiddleware({ app });
+
+  app.listen(port, () => {
+    console.log(`Server listening at ${port}`)
+  });
+  app.use('/',homeRoutes);
+} 
+
+
 
 db.once("open", () => {
   console.log("Connected successfully to MongoDB");
-  server.listen().then(({ url }) => {
-    console.log(`Server ready at ${url}`)
-  })
+  serverStart()
 });

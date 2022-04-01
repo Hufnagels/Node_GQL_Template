@@ -1,0 +1,43 @@
+type Map {
+    _id: ID!
+    owner: String!
+    title: String!
+    description: String
+    originalMap: String!
+    currentMap: String
+    mapimage: String
+    editinghistory: EditingHistory
+    createdAt: String
+    updatedAt: String
+  }
+
+  type EditingHistory {
+    updated: String
+    editedMap: String
+  }
+
+  type MapsResult {
+    maps: [Map]
+    currentPage: Int
+    totalPages: Int
+  }
+
+  type Query {
+    getMaps(search: String, page: Int, limit: Int): MapsResult
+    getMap(_id: ID!): [Map]
+  }
+
+  input MapInput {
+    # owner: String!
+    title: String!
+    description: String
+    # originalMap: String!
+    currentMap: String
+    mapimage: String
+  }
+
+  # type Mutation {
+  #   createPost(post: PostInput): Post
+  #   deletePost(_id: ID!): String
+  #   updatePost(_id: ID, post: PostInput): Post
+  # }
