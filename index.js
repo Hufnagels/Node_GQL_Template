@@ -19,15 +19,18 @@ const serverStart = async () => {
     typeDefs,
     resolvers,
     //playground: true,
-  });
+  })
 
   await apolloServer.start();
 
   apolloServer.applyMiddleware({ app });
 
   app.listen(port, () => {
-    console.log(`Server listening at ${port}`)
-  });
+    //console.log(`Server listening at ${port}`)
+    console.log(
+      `🚀 Server ready at http://localhost:${port}${apolloServer.graphqlPath}`
+     )
+  })
   app.use('/',homeRoutes);
 } 
 
@@ -35,5 +38,6 @@ const serverStart = async () => {
 
 db.once("open", () => {
   console.log("Connected successfully to MongoDB");
+  console.log("Starting Apollo server...");
   serverStart()
 });
