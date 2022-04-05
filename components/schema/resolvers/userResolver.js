@@ -1,24 +1,29 @@
 const { _ } = require('lodash')
+const mongoose = require("mongoose");
 const Users = require('../../database/models/user.model')
 
 module.exports = {
   Query: {
     // Users
+    users: async (parent, args) => {
+      return await Users.find()
+    },
     getUsers: async (parent, args) => {
-      const { search = null, page = 1, limit = 20 } = args;
-      console.log(args)
+      const { search , page = 1, limit = 20 } = args;
+console.log('args', args)
+//console.log('parent',parent)
       let searchQuery = {};
-      if (search) {
-        // update the search query
+      if (search ) {
         searchQuery = {
           $or: [
-            { first_name:   { $regex: search, $options: 'i' } },
-            { family_name:  { $regex: search, $options: 'i' } },
-            { username:     { $regex: search, $options: 'i' } },
-            { email:        { $regex: search, $options: 'i' } },
+            { firstName:  { $regex: search, $options: 'i' } },
+            { lastName:   { $regex: search, $options: 'i' } },
+            { username:   { $regex: search, $options: 'i' } },
+            { email:      { $regex: search, $options: 'i' } },
           ]
         };
       }
+
       const users = await Users.find(searchQuery)
         .limit(limit)
         .skip((page - 1) * limit)
@@ -32,6 +37,7 @@ module.exports = {
         currentPage: page
       }
     },
+
     getUser: async (parent, args) => {
       const { _id } = args;
       return await Users.find({_id: _id })
@@ -40,27 +46,63 @@ module.exports = {
 
   Mutation: {
     createUser: async (parent, args, context, info) => {
-      const {first_name, family_name, date_of_birth} = args.user;
+console.log('createUser args', args)
+      const {username, firstName, lastName, date_of_birth, email, password} = args.input;
+      const _id = new mongoose.Types.ObjectId();
+
       const user = new Users({
-        first_name,
-        family_name,
+        _id,
+        username,
+        firstName,
+        lastName,
         date_of_birth,
+        email,
+        password,
       })
-      await user.save()
-      return user
+
+      await user.save((err, user) => {
+        if (err) {
+          console.log('save error', error)
+        } else {
+          const id = user._id.toString()
+          console.log('saved user', user, id)
+        }
+      })
+
+return user
+
+/*       await Users.findOne({ username:username }, doc => {
+console.log('createUser findSaved', doc)
+return
+        if (err) throw err;
+         
+        // test a matching password
+        user.comparePassword(password, (err, isMatch) => {
+            if (err) throw err;
+            console.log(`Password (${password}):`, isMatch); // -&gt; Password123: true
+        });
+         
+        // test a failing password
+        user.comparePassword(password, (err, isMatch) => {
+            if (err) throw err;
+            console.log(`Password (${password}):`, isMatch); // -&gt; 123Password: false
+        });
+      });
+
+      return newUser */
     },
-    deletePost: async (parent, args, context, info) => {
+    deleteUser: async (parent, args, context, info) => {
       const { _id } = args
       await Users.findByIdAndDelete({_id})
       return "OK"
     },
-    updatePost: async (parent, args, context, info) => {
+    updateUser: async (parent, args, context, info) => {
       const { _id } = args
-      const {first_name, family_name, date_of_birth} = args.user;
+      const {firstName, lastName, date_of_birth, email} = args.user;
 
       const user = await Users.findByIdAndUpdate(
         _id, 
-        {first_name, family_name, date_of_birth}, 
+        {firstName, lastName, date_of_birth, email}, 
         {new: true}
       )
       return user

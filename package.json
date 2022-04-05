@@ -1,7 +1,7 @@
 {
   "name": "node_gql_mongo_template",
   "version": "0.1.0",
-  "description": "Apollo express server to datahandling with GraphQL",
+  "description": "Apollo express server for datahandling with GraphQL",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,14 +10,16 @@
   "keywords": [
     "Node",
     "GraphQL",
-    "MongoDB"
+    "MongoDB",
+    "Apollo"
   ],
   "author": "Hufnagels",
-  "license": "MIT",
+  "licence": "MIT",
   "dependencies": {
     "@graphql-tools/load-files": "^6.5.3",
     "@graphql-tools/merge": "^8.2.6",
     "apollo-server-express": "^3.6.7",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -26,6 +28,7 @@
     "lodash": "^4.17.21",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.9",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "validator": "^13.7.0"
   }
 }

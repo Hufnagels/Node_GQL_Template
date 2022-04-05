@@ -1,36 +1,46 @@
 type User {
-    _id: ID!
-    username: String!
-    first_name: String
-    family_name: String
-    date_of_birth: String
-    email: String!
-    password: String!
-    createdAt: String
-    updatedAt: String
-  }
+  _id: ID!
+  username: String!
+  firstName: String
+  lastName: String
+  date_of_birth: String
+  email: String!
+  password: String
+  createdAt: String
+  updatedAt: String
+}
 
-  type UsersResult {
-    users: [User]
-    currentPage: Int
-    totalPages: Int
-  }
+type UsersResult {
+  users: [User]
+  currentPage: Int
+  totalPages: Int
+}
 
-  type Query {
-    getUsers(search: String, page: Int, limit: Int): UsersResult
-    getUser(_id: ID!): [User]
-  }
+type Query {
+  users: [User]
+  getUsers(search: String, page: Int, limit: Int): UsersResult
+  getUser(_id: ID!): [User]
+}
 
-  input UserInput {
-    # username: String!
-    first_name: String
-    family_name: String
-    date_of_birth: String
-    # email: String!
-  }
+input UserInputAdd {
+  username: String
+  firstName: String
+  lastName: String
+  date_of_birth: String
+  email: String
+  password: String
+}
 
-  type Mutation {
-    createUser(user: UserInput): User
-    deleteUser(_id: ID!): String
-    updateUser(_id: ID, user: UserInput): User
-  }
+input UserInputUpdate {
+  #username: String
+  firstName: String
+  lastName: String
+  date_of_birth: String
+  #email: String
+}
+
+type Mutation {
+  createUser(input: UserInputAdd): User
+  deleteUser(_id: ID!): String
+  updateUser(_id: ID!, input: UserInputUpdate!): User
+}

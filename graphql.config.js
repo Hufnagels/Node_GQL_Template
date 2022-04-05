@@ -1,7 +1,7 @@
 module.exports = {
   projects: {
       app: {
-          schema: ["./schema/typedefs.js"],
+          schema: ["./schema/typeDefs.js"],
           documents: ["**/*.{graphql,js,ts,jsx,tsx}"],
       }
   }
