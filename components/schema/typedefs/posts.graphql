@@ -27,7 +27,7 @@ type Post {
   }
 
   type Mutation {
-    createPost(post: PostInput): Post
+    createPost(input: PostInput): Post
     deletePost(_id: ID!): String
     updatePost(_id: ID, post: PostInput): Post
   }

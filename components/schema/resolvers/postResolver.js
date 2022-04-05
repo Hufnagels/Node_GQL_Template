@@ -38,13 +38,15 @@ module.exports = {
   },
   Mutation: {
     createPost: async (parent, args, context, info) => {
-      const {author, title, description, titleimage} = args.post;
+console.log('add post args', args)
+      const {author, title, description, titleimage} = args.input;
       const post = new Posts({
         author, 
         title, 
         description, 
-        titleimage}
-      )
+        titleimage
+      })
+
       await post.save()
       return post
     },
