@@ -1,6 +1,7 @@
 const { _ } = require('lodash')
 const mongoose = require("mongoose");
 const Users = require('../../database/models/user.model')
+const { ApolloError, AuthenticationError, ForbiddenError, UserInputError } = require( 'apollo-server-express');
 
 module.exports = {
   Query: {
@@ -40,16 +41,33 @@ console.log('args', args)
 
     getUser: async (parent, args) => {
       const { _id } = args;
-      return await Users.find({_id: _id })
+      console.log('getUser', args, _id)
+      return await Users.findById(_id )
+//       const userRecord = await Users.findById(_id);
+// console.log(userRecord)
+//       if (userRecord) {
+//         return {
+//           __typename: "User",
+//           ...userRecord,
+//         };
+//       }
+//       return {
+//         __typename: "UserNotFound",
+//         message: `The user with the id ${args._id} does not exist.`,
+//       };
     },
   },
 
   Mutation: {
     createUser: async (parent, args, context, info) => {
+      // throw new UserInputError(
+      //   "Name could not be fetched.",
+      //   "CAN_NOT_FETCH_BY_ID",
+      // );
 console.log('createUser args', args)
       const {username, firstName, lastName, date_of_birth, email, password} = args.input;
       const _id = new mongoose.Types.ObjectId();
-
+      let error = {}
       const user = new Users({
         _id,
         username,
@@ -62,18 +80,19 @@ console.log('createUser args', args)
 
       await user.save((err, user) => {
         if (err) {
-          console.log('save error', error)
+console.log('save error', JSON.stringify(err), err.code)
+          error = err
+          //return new ApolloError('Email already taken', 'USER_ERROR');
         } else {
           const id = user._id.toString()
-          console.log('saved user', user, id)
+console.log('saved user', user, id)
         }
       })
+      return user
 
-return user
-
-/*       await Users.findOne({ username:username }, doc => {
-console.log('createUser findSaved', doc)
-return
+      /*  await Users.findOne({ username:username }, doc => {
+        console.log('createUser findSaved', doc)
+        return
         if (err) throw err;
          
         // test a matching password

@@ -2,6 +2,7 @@ type Post {
     _id: ID!
     author: String!
     title: String!
+    subtitle: String
     description: String
     titleimage: String
     createdAt: String
@@ -16,12 +17,13 @@ type Post {
 
   type Query {
     getPosts(search: String, page: Int, limit: Int): PostsResult
-    getPost(_id: ID!): [Post]
+    getPost(_id: ID!): Post
   }
 
   input PostInput {
     author: String
     title: String
+    subtitle: String
     description: String
     titleimage: String
   }

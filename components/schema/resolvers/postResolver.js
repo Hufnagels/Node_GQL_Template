@@ -14,6 +14,7 @@ module.exports = {
           $or: [
             { author:       { $regex: search, $options: 'i' } },
             { title:        { $regex: search, $options: 'i' } },
+            { subtitle:     { $regex: search, $options: 'i' } },
             { description:  { $regex: search, $options: 'i' } },
           ]
         };
@@ -33,17 +34,19 @@ module.exports = {
     },
     getPost: async (parent, args) => {
       const { _id } = args;
-      return await Posts.find({_id: _id })
+console.log('getPost', args)
+      return await Posts.findById(_id)
     },
   },
   Mutation: {
     createPost: async (parent, args, context, info) => {
 console.log('add post args', args)
-      const {author, title, description, titleimage} = args.input;
+      const {author, title, subtitle, description, titleimage} = args.input;
       const post = new Posts({
-        author, 
-        title, 
-        description, 
+        author,
+        title,
+        subtitle,
+        description,
         titleimage
       })
 
@@ -61,7 +64,7 @@ console.log('add post args', args)
 
       const post = await Posts.findByIdAndUpdate(
         _id, 
-        {title, description, titleimage}, 
+        {title, subtitle, description, titleimage}, 
         {new: true}
       )
       return post

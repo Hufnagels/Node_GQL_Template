@@ -16,10 +16,16 @@ type UsersResult {
   totalPages: Int
 }
 
+type UserNotFoundError {
+  message: String!
+}
+
+union UserResult = User | UserNotFoundError
+
 type Query {
   users: [User]
   getUsers(search: String, page: Int, limit: Int): UsersResult
-  getUser(_id: ID!): [User]
+  getUser(_id: ID!): User #UserResult!
 }
 
 input UserInputAdd {
@@ -38,6 +44,7 @@ input UserInputUpdate {
   date_of_birth: String
   #email: String
 }
+
 
 type Mutation {
   createUser(input: UserInputAdd): User

@@ -2,9 +2,12 @@ const express = require("express");
 const cors = require("cors");
 require('dotenv').config();
 
-const { ApolloServer, gql } = require( 'apollo-server-express');
+const { ApolloServer, AuthenticationError, ForbiddenError, UserInputError } = require( 'apollo-server-express');
 const resolvers = require( './components/schema/resolvers');
 const typeDefs = require( './components/schema/typeDefs');
+
+const AppError = require('./components/controllers/AppErrorController');
+const errorController = require('./components/controllers/errorController');
 
 const homeRoutes = require('./components/routes/home')
 const port =  4002;
@@ -14,8 +17,9 @@ const serverStart = async () => {
   const app = express();
   app.use(express.json());
   app.use(cors());
-
-  /* */
+  /*
+  app.use(errorController)
+   */
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
