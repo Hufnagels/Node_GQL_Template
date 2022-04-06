@@ -39,22 +39,15 @@ console.log('args', args)
       }
     },
 
-    getUser: async (parent, args) => {
+    getUser: async (parent, args, context) => {
       const { _id } = args;
-      console.log('getUser', args, _id)
-      return await Users.findById(_id )
-//       const userRecord = await Users.findById(_id);
-// console.log(userRecord)
-//       if (userRecord) {
-//         return {
-//           __typename: "User",
-//           ...userRecord,
-//         };
-//       }
-//       return {
-//         __typename: "UserNotFound",
-//         message: `The user with the id ${args._id} does not exist.`,
-//       };
+console.log('getUser args,id', args, _id, context)
+      //return await Users.findById(_id )
+      const userRecord = await Users.findById(_id);
+console.log('getUser userRecord', userRecord)
+      if (!userRecord) throw new Error(`The user with the id ${_id} does not exist.`)
+
+      return userRecord
     },
   },
 
@@ -78,42 +71,19 @@ console.log('createUser args', args)
         password,
       })
 
-      await user.save((err, user) => {
-        if (err) {
-console.log('save error', JSON.stringify(err), err.code)
-          error = err
-          //return new ApolloError('Email already taken', 'USER_ERROR');
-        } else {
-          const id = user._id.toString()
-console.log('saved user', user, id)
-        }
-      })
+      try {
+        await user.save()
+      } catch (err) {
+        console.log('err', JSON.stringify(err.keyValue) )
+        throw new ApolloError(`The user with the given data ${JSON.stringify(err.keyValue)} exist.`)
+      }
       return user
 
-      /*  await Users.findOne({ username:username }, doc => {
-        console.log('createUser findSaved', doc)
-        return
-        if (err) throw err;
-         
-        // test a matching password
-        user.comparePassword(password, (err, isMatch) => {
-            if (err) throw err;
-            console.log(`Password (${password}):`, isMatch); // -&gt; Password123: true
-        });
-         
-        // test a failing password
-        user.comparePassword(password, (err, isMatch) => {
-            if (err) throw err;
-            console.log(`Password (${password}):`, isMatch); // -&gt; 123Password: false
-        });
-      });
-
-      return newUser */
     },
     deleteUser: async (parent, args, context, info) => {
       const { _id } = args
       await Users.findByIdAndDelete({_id})
-      return "OK"
+      return true
     },
     updateUser: async (parent, args, context, info) => {
       const { _id } = args

@@ -34,7 +34,6 @@ module.exports = {
     },
     getPost: async (parent, args) => {
       const { _id } = args;
-console.log('getPost', args)
       return await Posts.findById(_id)
     },
   },
@@ -42,6 +41,8 @@ console.log('getPost', args)
     createPost: async (parent, args, context, info) => {
 console.log('add post args', args)
       const {author, title, subtitle, description, titleimage} = args.input;
+      let error = {}
+
       const post = new Posts({
         author,
         title,
@@ -50,7 +51,13 @@ console.log('add post args', args)
         titleimage
       })
 
-      await post.save()
+      try {
+        await post.save()
+      } catch (err) {
+        console.log('err', JSON.stringify(err.keyValue) )
+        throw new ApolloError(`The post with the given data ${JSON.stringify(err.keyValue)} exist.`)
+      }
+
       return post
     },
     deletePost: async (parent, args, context, info) => {

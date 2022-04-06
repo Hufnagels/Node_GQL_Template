@@ -15,6 +15,12 @@ type Post {
     totalPages: Int
   }
 
+  type PostError {
+    message: String
+  }
+
+  
+
   type Query {
     getPosts(search: String, page: Int, limit: Int): PostsResult
     getPost(_id: ID!): Post

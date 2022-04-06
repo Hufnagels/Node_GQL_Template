@@ -16,16 +16,16 @@ type UsersResult {
   totalPages: Int
 }
 
-type UserNotFoundError {
+type UserError {
   message: String!
 }
 
-union UserResult = User | UserNotFoundError
+union UserResult = User | UserError
 
 type Query {
   users: [User]
   getUsers(search: String, page: Int, limit: Int): UsersResult
-  getUser(_id: ID!): User #UserResult!
+  getUser(_id: ID!): User!
 }
 
 input UserInputAdd {
