@@ -53,10 +53,6 @@ console.log('getUser userRecord', userRecord)
 
   Mutation: {
     createUser: async (parent, args, context, info) => {
-      // throw new UserInputError(
-      //   "Name could not be fetched.",
-      //   "CAN_NOT_FETCH_BY_ID",
-      // );
 console.log('createUser args', args)
       const {username, firstName, lastName, date_of_birth, email, password} = args.input;
       const _id = new mongoose.Types.ObjectId();
@@ -71,13 +67,22 @@ console.log('createUser args', args)
         password,
       })
 
-      try {
-        await user.save()
-      } catch (err) {
-        console.log('err', JSON.stringify(err.keyValue) )
-        throw new ApolloError(`The user with the given data ${JSON.stringify(err.keyValue)} exist.`)
-      }
-      return user
+      return new Promise((resolve, reject) => {
+        user.save().then((user) => {
+          resolve(user);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+      
+      // try {
+      //   await user.save()
+      // } catch (err) {
+      //   console.log('err', JSON.stringify(err.keyValue) )
+      //   //throw new ApolloError(`The user with the given data ${JSON.stringify(err.keyValue)} exist.`)
+      //   return err
+      // }
+      // return user
 
     },
     deleteUser: async (parent, args, context, info) => {

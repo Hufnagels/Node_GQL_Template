@@ -26,7 +26,7 @@ type Post {
     getPost(_id: ID!): Post
   }
 
-  input PostInput {
+  input PostInputCreate {
     author: String
     title: String
     subtitle: String
@@ -34,8 +34,15 @@ type Post {
     titleimage: String
   }
 
+  input PostInputUpdate { 
+    title: String
+    subtitle: String
+    description: String
+    titleimage: String
+  }
+
   type Mutation {
-    createPost(input: PostInput): Post
+    createPost(input: PostInputCreate): Post
     deletePost(_id: ID!): String
-    updatePost(_id: ID, post: PostInput): Post
+    updatePost(_id: ID, post: PostInputUpdate): Post
   }

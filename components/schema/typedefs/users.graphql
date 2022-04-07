@@ -1,3 +1,10 @@
+scalar Date
+
+interface UserError {
+  message: String!
+  path: String
+}
+
 type User {
   _id: ID!
   username: String!
@@ -10,25 +17,29 @@ type User {
   updatedAt: String
 }
 
+# getUsers
 type UsersResult {
   users: [User]
   currentPage: Int
   totalPages: Int
 }
 
-type UserError {
-  message: String!
-}
-
-union UserResult = User | UserError
-
+# Queries section
 type Query {
   users: [User]
   getUsers(search: String, page: Int, limit: Int): UsersResult
   getUser(_id: ID!): User!
 }
 
-input UserInputAdd {
+# Mutation section
+type ReturnedUserError implements UserError {
+  message: String!
+  locations: [String]
+  path: String
+}
+
+# createUser
+input UserInputCreate {
   username: String
   firstName: String
   lastName: String
@@ -37,6 +48,12 @@ input UserInputAdd {
   password: String
 }
 
+type CreateUserPayload {
+  user: User
+  userErrors: [ReturnedUserError]
+}
+
+# updateUser
 input UserInputUpdate {
   #username: String
   firstName: String
@@ -44,10 +61,13 @@ input UserInputUpdate {
   date_of_birth: String
   #email: String
 }
-
+type UpdateUserPayload {
+  user: User
+  userErrors: [ReturnedUserError]
+}
 
 type Mutation {
-  createUser(input: UserInputAdd): User
+  createUser(input: UserInputCreate): CreateUserPayload
+  updateUser(_id: ID!, input: UserInputUpdate!): UpdateUserPayload
   deleteUser(_id: ID!): String
-  updateUser(_id: ID!, input: UserInputUpdate!): User
 }
