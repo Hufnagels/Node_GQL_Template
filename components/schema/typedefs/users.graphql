@@ -61,6 +61,7 @@ input UserInputUpdate {
   date_of_birth: String
   #email: String
 }
+
 type UpdateUserPayload {
   user: User
   userErrors: [ReturnedUserError]

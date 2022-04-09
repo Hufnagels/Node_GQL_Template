@@ -5,7 +5,7 @@ module.exports = {
   Query: {
     // Posts
     getPosts: async (parent, args) => {
-      const { search = null, page = 1, limit = 20 } = args;
+      const { search , page = 1, limit = 10 } = args;
       console.log(args)
       let searchQuery = {};
       if (search) {
@@ -19,22 +19,28 @@ module.exports = {
           ]
         };
       }
-      const posts = await Posts.find(searchQuery)
-        .limit(limit)
-        .skip((page - 1) * limit)
-        .lean();
       
       const count = await Posts.countDocuments(searchQuery);
-      
+      const totalPages = Math.ceil(count / limit)
+      const correctedPage = totalPages < page ? totalPages : page
+
+      const posts = await Posts.find(searchQuery)
+        .limit(limit)
+        .skip((correctedPage - 1) * limit)
+        .lean();
+
       return {
         posts,
-        totalPages: Math.ceil(count / limit),
-        currentPage: page
+        totalPages: totalPages,
+        currentPage: correctedPage
       }
     },
     getPost: async (parent, args) => {
       const { _id } = args;
-      return await Posts.findById(_id)
+      const postRecord = await Posts.findById(_id)
+      if (!postRecord) throw new Error(`The post with the id ${_id} does not exist.`)
+
+      return postRecord
     },
   },
   Mutation: {
@@ -51,14 +57,20 @@ console.log('add post args', args)
         titleimage
       })
 
-      try {
-        await post.save()
-      } catch (err) {
-        console.log('err', JSON.stringify(err.keyValue) )
-        throw new ApolloError(`The post with the given data ${JSON.stringify(err.keyValue)} exist.`)
-      }
-
-      return post
+      return new Promise((resolve, reject) => {
+        post.save().then((post) => {
+          resolve(user);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+      // try {
+      //   await post.save()
+      // } catch (err) {
+      //   console.log('err', JSON.stringify(err.keyValue) )
+      //   throw new ApolloError(`The post with the given data ${JSON.stringify(err.keyValue)} exist.`)
+      // }
+      // return post
     },
     deletePost: async (parent, args, context, info) => {
       const { _id } = args

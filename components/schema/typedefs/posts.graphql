@@ -1,48 +1,70 @@
+scalar Date
+
+interface PostError {
+  message: String!
+  path: String
+}
+
 type Post {
-    _id: ID!
-    author: String!
-    title: String!
-    subtitle: String
-    description: String
-    titleimage: String
-    createdAt: String
-    updatedAt: String
-  }
-
-  type PostsResult {
-    posts: [Post]
-    currentPage: Int
-    totalPages: Int
-  }
-
-  type PostError {
-    message: String
-  }
-
+  _id: ID!
+  author: String!
+  title: String!
+  subtitle: String
+  description: String
+  titleimage: String
+  createdAt: String
+  updatedAt: String
+}
   
+# getPosts
+type PostsResult {
+  posts: [Post]
+  currentPage: Int
+  totalPages: Int
+}
 
-  type Query {
-    getPosts(search: String, page: Int, limit: Int): PostsResult
-    getPost(_id: ID!): Post
-  }
+# Queries section
+type Query {
+  getPosts(search: String, page: Int, limit: Int): PostsResult
+  getPost(_id: ID!): Post
+}
 
-  input PostInputCreate {
-    author: String
-    title: String
-    subtitle: String
-    description: String
-    titleimage: String
-  }
+# Mutation section
+type ReturnedPostError implements PostError {
+  message: String!
+  locations: [String]
+  path: String
+}
 
-  input PostInputUpdate { 
-    title: String
-    subtitle: String
-    description: String
-    titleimage: String
-  }
+# CreatePost
+input PostInputCreate {
+  author: String
+  title: String
+  subtitle: String
+  description: String
+  titleimage: String
+}
 
-  type Mutation {
-    createPost(input: PostInputCreate): Post
-    deletePost(_id: ID!): String
-    updatePost(_id: ID, post: PostInputUpdate): Post
-  }
+type CreatePostPayload {
+  post: Post
+  postErrors: [ReturnedPostError]
+}
+
+# updatePost
+input PostInputUpdate { 
+  title: String
+  subtitle: String
+  description: String
+  titleimage: String
+}
+
+type UpdatePostPayload {
+  poat: Post
+  postErrors: [ReturnedPostError]
+}
+
+type Mutation {
+  createPost(input: PostInputCreate): CreatePostPayload
+  updatePost(_id: ID!, input: PostInputUpdate!): UpdatePostPayload
+  deletePost(_id: ID!): String
+}
