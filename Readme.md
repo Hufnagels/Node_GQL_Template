@@ -2,6 +2,7 @@
 Apollo server (express) with mongoose
 
 > MongoDB 4.2 in Docker on Ubuntu
+> 
 > Heroku and netlify deploy --> TODO: make
 
 # TOC
