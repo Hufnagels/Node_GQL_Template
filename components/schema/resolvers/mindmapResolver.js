@@ -1,10 +1,10 @@
 const { _ } = require('lodash')
-const Maps = require('../../database/models/map.model')
+const Mindmaps = require('../../database/models/mindmap.model')
 
 module.exports = {
   Query: {
     // Maps
-    getMaps: async (parent, args) => {
+    getMindmaps: async (parent, args) => {
       const { search , page = 1, limit = 10 } = args;
       let searchQuery = {};
       if (search) {
@@ -16,42 +16,36 @@ module.exports = {
         }
       }
 
-      const count = await Maps.countDocuments(searchQuery);
-      if (!count) return {
-        maps: [],
-        totalPages: 0,
-        currentPage: 0
-      }
-      
+      const count = await Mindmaps.countDocuments(searchQuery);
       const totalPages = Math.ceil(count / limit)
       const correctedPage = totalPages < page ? totalPages : page
 
-      const maps = await Maps.find(searchQuery)
+      const mindmaps = await Mindmaps.find(searchQuery)
         .limit(limit)
         .skip((page - 1) * limit)
         .lean();
 
       return {
-        maps: count > 0 ? maps : [],
+        mindmaps,
         totalPages: totalPages,
         currentPage: correctedPage
       }
     },
-    getMap: async (parent, args) => {
+    getMindmap: async (parent, args) => {
       const { _id } = args;
-      const mapRecord = await Maps.findById(_id)
-      if (!mapRecord) throw new Error(`The map with the id ${_id} does not exist.`)
+      const mindmapRecord = await Mindmaps.findById(_id)
+      if (!mindmapRecord) throw new Error(`The mindmap with the id ${_id} does not exist.`)
 
-      return mapRecord
+      return mindmapRecord
     },
   },
   Mutation: {
-    createMap: async (parent, args, context, info) => {
-      console.log('add post args', args)
+    createMindmap: async (parent, args, context, info) => {
+      console.log('createMindmap args', args)
       const { owner, title, description, originalMap, currentMap, mapimage } = args.input;
       let error = {}
 
-      const map = new Maps({
+      const mindmap = new Mindmaps({
         owner,
         title,
         description,
@@ -61,29 +55,29 @@ module.exports = {
       })
 
       return new Promise((resolve, reject) => {
-        map.save().then((map) => {
-          resolve(user);
+        mindmap.save().then((res) => {
+          resolve(mindmap);
         }).catch((err) => {
           reject(err);
         });
       });
 
     },
-    deleteMap: async (parent, args, context, info) => {
+    deleteMindmap: async (parent, args, context, info) => {
       const { _id } = args
-      await Maps.findByIdAndDelete({ _id })
+      await Mindmaps.findByIdAndDelete({ _id })
       return "OK"
     },
-    updateMap: async (parent, args, context, info) => {
+    updateMindmap: async (parent, args, context, info) => {
       const { _id } = args
-      const { author, title, description, titleimage } = args.post;
+      const { title, description, currentMap, mapimage, editinghistory } = args.input;
 
-      const map = await Maps.findByIdAndUpdate(
+      const mindmap = await Mindmaps.findByIdAndUpdate(
         _id,
         { title, description, currentMap, mapimage, editinghistory },
         { new: true }
       )
-      return map
+      return mindmap
     }
   }
 };

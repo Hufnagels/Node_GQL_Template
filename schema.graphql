@@ -1,0 +1,254 @@
+scalar Date
+
+interface MapError {
+  message: String!
+  path: String
+}
+
+type Map {
+  _id: ID!
+  owner: String!
+  title: String!
+  description: String
+  originalMap: String!
+  currentMap: String
+  mapimage: String
+  editinghistory: EditingHistory
+  createdAt: String
+  updatedAt: String
+}
+
+type EditingHistory {
+  updated: String
+  editedMap: String
+}
+
+type MapsResult {
+  maps: [Map]
+  currentPage: Int
+  totalPages: Int
+}
+
+type Query {
+  getMaps(search: String, page: Int, limit: Int): MapsResult
+  getMap(_id: ID!): [Map]
+  getMindmaps(search: String, page: Int, limit: Int): MindmapsResult
+  getMindmap(_id: ID!): [Mindmap]
+  getPosts(search: String, page: Int, limit: Int): PostsResult
+  getPost(_id: ID!): Post
+  users: [User]
+  getUsers(search: String, page: Int, limit: Int): UsersResult
+  getUser(_id: ID!): User!
+}
+
+type ReturnedMapError implements MapError {
+  message: String!
+  locations: [String]
+  path: String
+}
+
+input MapInputCreate {
+  owner: String!
+  title: String!
+  description: String
+  originalMap: String!
+  currentMap: String
+  mapimage: String
+}
+
+type CreateMapPayload {
+  map: Map
+  mapErrors: [ReturnedMapError]
+}
+
+input MapInputUpdate {
+  title: String!
+  description: String
+  currentMap: String
+  mapimage: String
+  editinghistory: String
+}
+
+type UpdateMapPayload {
+  map: Map
+  mapErrors: [ReturnedMapError]
+}
+
+type Mutation {
+  createMap(input: MapInputCreate): CreateMapPayload
+  updateMap(_id: ID!, input: MapInputUpdate!): UpdateMapPayload
+  deleteMap(_id: ID!): String
+  createMindmap(input: MindmapInputCreate): CreateMindmapPayload
+  updateMindmap(_id: ID!, input: MindmapInputUpdate!): UpdateMindmapPayload
+  deleteMindmap(_id: ID!): String
+  createPost(input: PostInputCreate): CreatePostPayload
+  updatePost(_id: ID!, input: PostInputUpdate!): UpdatePostPayload
+  deletePost(_id: ID!): String
+  createUser(input: UserInputCreate): CreateUserPayload
+  updateUser(_id: ID!, input: UserInputUpdate!): UpdateUserPayload
+  deleteUser(_id: ID!): String
+}
+
+interface MindmapError {
+  message: String!
+  path: String
+}
+
+type Mindmap {
+  _id: ID!
+  owner: String!
+  title: String!
+  description: String
+  originalMap: String!
+  currentMap: String
+  mapimage: String
+  editinghistory: EditingHistory
+  createdAt: String
+  updatedAt: String
+}
+
+type MindmapsResult {
+  mindmaps: [Mindmap]
+  currentPage: Int
+  totalPages: Int
+}
+
+type ReturnedMindmapError implements MindmapError {
+  message: String!
+  locations: [String]
+  path: String
+}
+
+input MindmapInputCreate {
+  owner: String
+  title: String
+  description: String
+  originalMap: String
+  currentMap: String
+  mapimage: String
+}
+
+type CreateMindmapPayload {
+  mindmap: Mindmap
+  mindmapErrors: [ReturnedMindmapError]
+}
+
+input MindmapInputUpdate {
+  title: String!
+  description: String
+  currentMap: String
+  mapimage: String
+  editinghistory: String
+}
+
+type UpdateMindmapPayload {
+  mindmap: Mindmap
+  mindmapErrors: [ReturnedMindmapError]
+}
+
+interface PostError {
+  message: String!
+  path: String
+}
+
+type Post {
+  _id: ID!
+  author: String!
+  title: String!
+  subtitle: String
+  description: String
+  titleimage: String
+  createdAt: String
+  updatedAt: String
+}
+
+type PostsResult {
+  posts: [Post]
+  currentPage: Int
+  totalPages: Int
+}
+
+type ReturnedPostError implements PostError {
+  message: String!
+  locations: [String]
+  path: String
+}
+
+input PostInputCreate {
+  author: String
+  title: String
+  subtitle: String
+  description: String
+  titleimage: String
+}
+
+type CreatePostPayload {
+  post: Post
+  postErrors: [ReturnedPostError]
+}
+
+input PostInputUpdate {
+  title: String
+  subtitle: String
+  description: String
+  titleimage: String
+}
+
+type UpdatePostPayload {
+  post: [Post]
+  postErrors: [ReturnedPostError]
+}
+
+interface UserError {
+  message: String!
+  path: String
+}
+
+type User {
+  _id: ID!
+  username: String!
+  firstName: String
+  lastName: String
+  date_of_birth: String
+  email: String!
+  password: String
+  createdAt: String
+  updatedAt: String
+}
+
+type UsersResult {
+  users: [User]
+  currentPage: Int
+  totalPages: Int
+}
+
+type ReturnedUserError implements UserError {
+  message: String!
+  locations: [String]
+  path: String
+}
+
+input UserInputCreate {
+  username: String
+  firstName: String
+  lastName: String
+  date_of_birth: String
+  email: String
+  password: String
+}
+
+type CreateUserPayload {
+  user: User
+  userErrors: [ReturnedUserError]
+}
+
+input UserInputUpdate {
+  firstName: String
+  lastName: String
+  date_of_birth: String
+}
+
+type UpdateUserPayload {
+  user: User
+  userErrors: [ReturnedUserError]
+}

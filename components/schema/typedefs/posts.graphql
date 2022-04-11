@@ -51,7 +51,7 @@ type CreatePostPayload {
 }
 
 # updatePost
-input PostInputUpdate { 
+input PostInputUpdate {
   title: String
   subtitle: String
   description: String
@@ -59,12 +59,17 @@ input PostInputUpdate {
 }
 
 type UpdatePostPayload {
-  poat: Post
+  post: [Post]
+  postErrors: [ReturnedPostError]
+}
+
+type DeletePostPayload {
+  post: Boolean
   postErrors: [ReturnedPostError]
 }
 
 type Mutation {
   createPost(input: PostInputCreate): CreatePostPayload
   updatePost(_id: ID!, input: PostInputUpdate!): UpdatePostPayload
-  deletePost(_id: ID!): String
+  deletePost(_id: ID!): DeletePostPayload
 }
