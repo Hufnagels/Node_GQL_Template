@@ -6,8 +6,8 @@ const { ApolloServer, AuthenticationError, ForbiddenError, UserInputError } = re
 const resolvers = require( './components/schema/resolvers');
 const typeDefs = require( './components/schema/typeDefs');
 
-const AppError = require('./components/controllers/AppErrorController');
-const errorController = require('./components/controllers/errorController');
+// const AppError = require('./components/controllers/AppErrorController');
+// const errorController = require('./components/controllers/errorController');
 
 const homeRoutes = require('./components/routes/home')
 const port =  4002;
@@ -33,6 +33,7 @@ const serverStart = async () => {
       // be manipulated in other ways, as long as it's returned.
       return err;
     },
+    context: ({req}) => ({req})
   })
 
   await apolloServer.start();

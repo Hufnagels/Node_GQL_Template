@@ -7,19 +7,13 @@ const SALT_WORK_FACTOR = 10;
 const userSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
-    username: { 
-      type: String, 
-      required: true, 
-      unique: true, 
-      maxLength: 20, 
-      trim: true,
-      validate: [isAlphanumeric, 'Usernames may only have letters and numbers.']
-    },
-    firstName: {type: String, required: true, maxLength: 100, trim: true},
-    lastName: {type: String, required: true, maxLength: 100, trim: true},
-    date_of_birth: {type: String},
-    email: { type: String, required: true, unique: true, validate: [isEmail, 'invalid email'],},
-    password: {type: String},
+    // username: { type: String, required: true, unique: true, maxLength: 20, trim: true, validate: [isAlphanumeric, 'Usernames may only have letters and numbers.'] },
+    firstName: { type: String, required: true, maxLength: 100, trim: true },
+    lastName: { type: String, required: true, maxLength: 100, trim: true },
+    date_of_birth: { type: String },
+    email: { type: String, required: true, unique: true, validate: [isEmail, 'invalid email'], },
+    password: { type: String },
+    token: { type: String },
   },
   {
     timestamps: true

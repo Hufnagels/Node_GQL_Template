@@ -7,7 +7,7 @@ interface UserError {
 
 type User {
   _id: ID!
-  username: String!
+  # username: String!
   firstName: String
   lastName: String
   date_of_birth: String
@@ -15,6 +15,7 @@ type User {
   password: String
   createdAt: String
   updatedAt: String
+  token: String
 }
 
 # getUsers
@@ -22,6 +23,7 @@ type UsersResult {
   users: [User]
   currentPage: Int
   totalPages: Int
+  count: Int
 }
 
 # Queries section
@@ -38,9 +40,9 @@ type ReturnedUserError implements UserError {
   path: String
 }
 
-# createUser
+# createUser --> register
 input UserInputCreate {
-  username: String
+  # username: String
   firstName: String
   lastName: String
   date_of_birth: String
@@ -67,8 +69,15 @@ type UpdateUserPayload {
   userErrors: [ReturnedUserError]
 }
 
+# loginUser
+input UserInputLogin {
+  email: String
+  password: String
+}
+
 type Mutation {
-  createUser(input: UserInputCreate): CreateUserPayload
-  updateUser(_id: ID!, input: UserInputUpdate!): UpdateUserPayload
+  createUser(input: UserInputCreate): User #CreateUserPayload
+  updateUser(_id: ID!, input: UserInputUpdate!): User #UpdateUserPayload
   deleteUser(_id: ID!): String
+  loginUser(input:UserInputLogin): User
 }

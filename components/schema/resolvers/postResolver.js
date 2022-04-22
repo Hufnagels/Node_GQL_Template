@@ -29,6 +29,7 @@ module.exports = {
       const correctedPage = totalPages < page ? totalPages : page
 
       const posts = await Posts.find(searchQuery)
+        .sort( { createdAt : -1 } )
         .limit(limit)
         .skip((correctedPage - 1) * limit)
         .lean();

@@ -5,7 +5,7 @@ module.exports = {
   Query: {
     // Maps
     getMaps: async (parent, args) => {
-      const { search , page = 1, limit = 10 } = args;
+      const { search, page = 1, limit = 10 } = args;
       let searchQuery = {};
       if (search) {
         searchQuery = {
@@ -20,13 +20,15 @@ module.exports = {
       if (!count) return {
         maps: [],
         totalPages: 0,
-        currentPage: 0
+        currentPage: 0,
+        count: 0
       }
-      
+
       const totalPages = Math.ceil(count / limit)
       const correctedPage = totalPages < page ? totalPages : page
 
       const maps = await Maps.find(searchQuery)
+        .sort({ createdAt: -1 })
         .limit(limit)
         .skip((page - 1) * limit)
         .lean();
@@ -34,7 +36,8 @@ module.exports = {
       return {
         maps: count > 0 ? maps : [],
         totalPages: totalPages,
-        currentPage: correctedPage
+        currentPage: correctedPage,
+        count
       }
     },
     getMap: async (parent, args) => {

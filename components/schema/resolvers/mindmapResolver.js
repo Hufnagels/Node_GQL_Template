@@ -5,7 +5,7 @@ module.exports = {
   Query: {
     // Maps
     getMindmaps: async (parent, args) => {
-      const { search , page = 1, limit = 10 } = args;
+      const { search, page = 1, limit = 10 } = args;
       let searchQuery = {};
       if (search) {
         searchQuery = {
@@ -21,6 +21,7 @@ module.exports = {
       const correctedPage = totalPages < page ? totalPages : page
 
       const mindmaps = await Mindmaps.find(searchQuery)
+        .sort({ createdAt: -1 })
         .limit(limit)
         .skip((page - 1) * limit)
         .lean();
