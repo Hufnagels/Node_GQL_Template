@@ -42,7 +42,7 @@ module.exports = {
   },
   Mutation: {
     createMindmap: async (parent, args, context, info) => {
-      console.log('createMindmap args', args)
+      //console.log('createMindmap args', args)
       const { owner, title, description, originalMap, currentMap, mapimage } = args.input;
       let error = {}
 

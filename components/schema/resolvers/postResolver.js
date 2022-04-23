@@ -10,7 +10,7 @@ module.exports = {
     // Posts
     getPosts: async (parent, args) => {
       const { search, page = 1, limit = 10 } = args;
-      console.log(args)
+      //console.log(args)
       let searchQuery = {};
       if (search) {
         // update the search query
@@ -29,7 +29,7 @@ module.exports = {
       const correctedPage = totalPages < page ? totalPages : page
 
       const posts = await Posts.find(searchQuery)
-        .sort( { createdAt : -1 } )
+        .sort({ createdAt: -1 })
         .limit(limit)
         .skip((correctedPage - 1) * limit)
         .lean();
@@ -50,7 +50,7 @@ module.exports = {
   },
   Mutation: {
     createPost: async (parent, args, context, info) => {
-      console.log('add post args', args)
+      //console.log('add post args', args)
       const { author, title, subtitle, description, titleimage } = args.input;
       let error = {}
 
@@ -65,7 +65,7 @@ module.exports = {
       try {
         await post.save()
       } catch (err) {
-        console.log('err', JSON.stringify(err.keyValue))
+        //console.log('err', JSON.stringify(err.keyValue))
         throw new ApolloError(`The post with the given data ${err.keyValue.title} exist.`)
       }
       return { post }
@@ -102,22 +102,22 @@ module.exports = {
       */
       const post = await Posts.findByIdAndDelete({ _id })
         .then(res => {
-          console.log('deletePost res', res)
+          //console.log('deletePost res', res)
           if (res === null) return false
           return true
         })
         .catch(err => {
-          console.log('err', JSON.stringify(err))
+          //console.log('err', JSON.stringify(err))
           throw new ApolloError(`The post with the given data ${_.toString(err.stringValue)} does not exist.`)
         })
-      console.log('deletePost post', post)
+      //console.log('deletePost post', post)
       return { post }
 
     },
     updatePost: async (parent, args, context, info) => {
       const { _id } = args
       const { title, subtitle, description, titleimage } = args.input;
-      console.log('updatePost args', args)
+      //console.log('updatePost args', args)
 
       const post = await Posts.findByIdAndUpdate(
         _id,
@@ -125,14 +125,14 @@ module.exports = {
         { new: true }
       )
         .then(res => {
-          console.log('updatePost res', res)
+          //console.log('updatePost res', res)
           return [res]
         })
         .catch(err => {
-          console.log('err', _.toString(err.stringValue), JSON.stringify(err))
+          //console.log('err', _.toString(err.stringValue), JSON.stringify(err))
           throw new ApolloError(`The post with the given data ${_.toString(err.stringValue)} does not exist.`)
         })
-      console.log('updatePost post', post)
+      //console.log('updatePost post', post)
       return { post }
 
     }

@@ -50,7 +50,7 @@ module.exports = {
   },
   Mutation: {
     createMap: async (parent, args, context, info) => {
-      console.log('add post args', args)
+      //console.log('add post args', args)
       const { owner, title, description, originalMap, currentMap, mapimage } = args.input;
       let error = {}
 

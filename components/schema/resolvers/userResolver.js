@@ -12,7 +12,7 @@ module.exports = {
   Query: {
     getUsers: async (parent, args) => {
       const { search, page = 1, limit = 10 } = args;
-      console.log('args', args)
+      //console.log('args', args)
       //console.log('parent',parent)
       let searchQuery = {};
       if (search) {
@@ -53,10 +53,10 @@ module.exports = {
     },
     getUser: async (parent, args, context) => {
       const { _id } = args;
-      console.log('getUser args,id', args, _id, context)
+      //console.log('getUser args,id', args, _id, context)
       //return await Users.findById(_id )
       const userRecord = await Users.findById(_id);
-      console.log('getUser userRecord', userRecord)
+      //console.log('getUser userRecord', userRecord)
       if (!userRecord) throw new ApolloError(`The user with the id ${_id} does not exist.`, 'USER_NOT_EXISTS_ERROR')
       return userRecord
     },
@@ -99,7 +99,7 @@ module.exports = {
 
       // Store new User
       const res = await newUser.save()
-      console.log('res', res)
+      //console.log('res', res)
       return {
         id: res._id,
         ...res._doc
