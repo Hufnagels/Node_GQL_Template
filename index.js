@@ -2,15 +2,15 @@ const express = require("express");
 const cors = require("cors");
 require('dotenv').config();
 
-const { ApolloServer, AuthenticationError, ForbiddenError, UserInputError } = require( 'apollo-server-express');
-const resolvers = require( './components/schema/resolvers');
-const typeDefs = require( './components/schema/typeDefs');
+const { ApolloServer } = require('apollo-server-express');
+const resolvers = require('./components/schema/resolvers');
+const typeDefs = require('./components/schema/typeDefs');
 
 // const AppError = require('./components/controllers/AppErrorController');
 // const errorController = require('./components/controllers/errorController');
 
 const homeRoutes = require('./components/routes/home')
-const port =  4002;
+const port = 4002;
 const db = require('./components/database/mongoconnect')
 
 const serverStart = async () => {
@@ -33,22 +33,22 @@ const serverStart = async () => {
       // be manipulated in other ways, as long as it's returned.
       return err;
     },
-    context: ({req}) => ({req})
+    context: ({ req, res }) => ({ req, res }),
   })
 
   await apolloServer.start();
 
   apolloServer.applyMiddleware({ app });
- 
+
   app.listen(port, () => {
-    console.log(`Server listening at ${port}`)
-    console.log(`🚀 Server ready at http://localhost:${port}${apolloServer.graphqlPath}`)
+    console.info(`Expressserver listening at ${port}`)
+    console.info(`Apolloserver ready at http://localhost:${port}${apolloServer.graphqlPath}`)
   })
-  app.use('/',homeRoutes);
-} 
+  app.use('/', homeRoutes);
+}
 
 db.once("open", () => {
-  console.log("Connected successfully to MongoDB");
-  console.log("Starting Apollo server...");
+  console.info("Connected successfully to MongoDB");
+  console.info("Starting Apollo server...");
   serverStart()
 });

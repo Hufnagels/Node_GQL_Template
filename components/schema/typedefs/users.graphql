@@ -18,6 +18,13 @@ type User {
   token: String
 }
 
+#Authentication
+type Auth {
+  user: User
+  token: String
+  refreshToken: String
+}
+
 # getUsers
 type UsersResult {
   users: [User]
